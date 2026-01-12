@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     hamburger.addEventListener('click', () => {
         navLinks.classList.toggle('active');
+        document.body.classList.toggle('menu-open'); // Toggle scroll lock
         const icon = hamburger.querySelector('i');
         if (navLinks.classList.contains('active')) {
             icon.classList.remove('fa-bars');
@@ -19,6 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     links.forEach(link => {
         link.addEventListener('click', () => {
             navLinks.classList.remove('active');
+            document.body.classList.remove('menu-open'); // Remove scroll lock
             hamburger.querySelector('i').classList.remove('fa-times');
             hamburger.querySelector('i').classList.add('fa-bars');
         });

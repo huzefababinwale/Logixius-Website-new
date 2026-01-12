@@ -1211,3 +1211,118 @@ footer::before {
     margin-bottom: 2rem;
     font-size: 1rem;
 }
+
+/* =========================================
+   MOBILE OPTIMIZATIONS (ADDED FIXES)
+   ========================================= */
+
+/* 1. GLOBAL MOBILE SAFETY FIX */
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
+/* 2. FIX CONTAINER PADDING ON SMALL SCREENS */
+@media (max-width: 768px) {
+    .container {
+        padding: 0 1rem;
+    }
+}
+
+/* 3. HERO SECTION MOBILE FIX */
+@media (max-width: 768px) {
+    .hero {
+        padding: 4rem 0 3rem;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+        line-height: 1.2;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+    }
+
+    .description {
+        font-size: 1rem;
+        max-width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .cta-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .btn-primary,
+    .btn-outline {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* 4. FLOAT CARD – HIDE ON MOBILE */
+@media (max-width: 768px) {
+    .float-card {
+        display: none;
+    }
+}
+
+/* 5. NAVBAR MOBILE UX IMPROVEMENTS */
+@media (max-width: 768px) {
+    .nav-links a {
+        font-size: 1.1rem;
+        padding: 1rem 0;
+    }
+}
+
+/* Scroll lock class (toggled by JS) */
+body.menu-open {
+    overflow: hidden;
+}
+
+/* 6. STATS SECTION MOBILE POLISH */
+@media (max-width: 768px) {
+    .counter {
+        font-size: 2.2rem;
+    }
+
+    .stat-item p {
+        font-size: 1rem;
+    }
+}
+
+/* 7. ABOUT & CARD GRID MOBILE FIX */
+@media (max-width: 768px) {
+    .about-content h2 {
+        font-size: 2rem;
+    }
+
+    .stats-grid-small {
+        grid-template-columns: 1fr;
+    }
+
+    .course-card,
+    .service-card,
+    .highlight-item {
+        padding: 2rem 1.5rem;
+    }
+}
+
+/* 8. FOOTER MOBILE CLEANUP */
+@media (max-width: 768px) {
+    footer {
+        text-align: center;
+    }
+
+    .footer-col p {
+        justify-content: center;
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
