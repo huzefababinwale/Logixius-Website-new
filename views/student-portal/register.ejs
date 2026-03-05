@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Application - Logixius</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        .apply-container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+        }
+
+        .section-title {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            color: #2563EB;
+        }
+    </style>
+</head>
+
+<body style="background-color: #F8FAFC;">
+    <%- include('../partials/header') %>
+
+        <div class="apply-container">
+            <h2 class="text-center mb-4">Internship Application Form</h2>
+
+            <form action="/portal/apply" method="POST">
+                <h4 class="section-title">Personal Details</h4>
+                <div class="row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="col" style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" name="full_name" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col" style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">Gender</label>
+                            <select name="gender" class="form-control" required>
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="col" style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="col" style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">Mobile Number</label>
+                            <input type="tel" name="mobile_no" class="form-control" pattern="[0-9]{10}"
+                                placeholder="10-digit number" required>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="section-title mt-4">Academic Details</h4>
+                <div class="form-group">
+                    <label class="form-label">College Name</label>
+                    <input type="text" name="college_name" class="form-control" required>
+                </div>
+
+                <div class="row" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <div class="col" style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">Degree Pursuing</label>
+                            <input type="text" name="degree" class="form-control" placeholder="e.g. B.Tech, BCA"
+                                required>
+                        </div>
+                    </div>
+                    <div class="col" style="flex: 1;">
+                        <div class="form-group">
+                            <label class="form-label">Department / Branch</label>
+                            <input type="text" name="department" class="form-control" placeholder="e.g. CSE, IT"
+                                required>
+                        </div>
+                    </div>
+                </div>
+
+                <h4 class="section-title mt-4">Internship Preference</h4>
+                <div class="form-group">
+                    <label class="form-label">Select Domain</label>
+                    <select name="domain" class="form-control" required>
+                        <option value="">Choose a domain...</option>
+                        <option value="Artificial Intelligence">Artificial Intelligence</option>
+                        <option value="Machine Learning">Machine Learning</option>
+                        <option value="Data Science">Data Science</option>
+                        <option value="Web Development">Web Development</option>
+                        <option value="App Development">App Development</option>
+                        <option value="Cloud Computing">Cloud Computing</option>
+                    </select>
+                </div>
+
+                <h4 class="section-title mt-4">Account Security</h4>
+                <div class="form-group">
+                    <label class="form-label">Create Password</label>
+                    <input type="password" name="password" class="form-control" minlength="6"
+                        placeholder="Min 6 characters" required>
+                </div>
+
+                <button type="submit" class="btn-primary mt-4" style="width: 100%;">Submit Application</button>
+                <p class="text-center mt-3">Already applied? <a href="/portal/login">Login here</a></p>
+            </form>
+        </div>
+</body>
+
+</html>

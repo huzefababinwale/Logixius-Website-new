@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Dashboard - Logixius</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-card {
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .status-pending {
+            background: #fff7ed;
+            color: #9a3412;
+            border: 1px solid #fed7aa;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+
+        .status-rejected {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .info-item label {
+            display: block;
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-item p {
+            font-weight: 600;
+            color: #1e293b;
+        }
+    </style>
+</head>
+
+<body style="background-color: #F8FAFC;">
+    <%- include('../partials/header') %>
+
+        <section class="dashboard-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Student Dashboard</h2>
+                <div>
+                    <span>Welcome, <strong>
+                            <%= student.full_name %>
+                        </strong></span>
+                    <a href="/portal/logout" class="btn-outline ml-3"
+                        style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</a>
+                </div>
+            </div>
+
+            <% if (application) { %>
+                <div class="status-card status-<%= application.status.toLowerCase() %>">
+                    <% if (application.status==='PENDING' ) { %>
+                        <i class="fas fa-clock fa-2x"></i>
+                        <div>
+                            <h4>Application Pending</h4>
+                            <p class="mb-0">Your internship application for <strong>
+                                    <%= application.domain %>
+                                </strong> is currently under review.</p>
+                        </div>
+                        <% } else if (application.status==='ONGOING' ) { %>
+                            <i class="fas fa-briefcase fa-2x"></i>
+                            <div>
+                                <h4>Application Approved!</h4>
+                                <p class="mb-0">Congratulations! You have been selected for the <strong>
+                                        <%= application.domain %>
+                                    </strong> internship.</p>
+                                <p class="mt-2 mb-0"><strong>Intern ID:</strong>
+                                    <%= application.intern_id %>
+                                </p>
+                            </div>
+                            <% } else if (application.status==='COMPLETED' ) { %>
+                                <i class="fas fa-check-circle fa-2x"></i>
+                                <div>
+                                    <h4>Internship Completed!</h4>
+                                    <p class="mb-0">You have successfully completed your internship in <strong>
+                                            <%= application.domain %>
+                                        </strong>.</p>
+                                    <p class="mt-2 mb-0"><strong>Intern ID:</strong>
+                                        <%= application.intern_id %>
+                                    </p>
+                                </div>
+                                <% } else { %>
+                                    <i class="fas fa-times-circle fa-2x"></i>
+                                    <div>
+                                        <h4>Application Rejected</h4>
+                                        <p class="mb-0">We regret to inform you that your application was not selected
+                                            at this time.</p>
+                                    </div>
+                                    <% } %>
+                </div>
+
+                <!-- Download Offer Letter (Available for Ongoing & Completed) -->
+                <% if ((application.status==='ONGOING' || application.status==='COMPLETED' ) &&
+                    application.offer_letter_path) { %>
+                    <div class="text-center mb-3">
+                        <a href="<%= application.offer_letter_path %>" class="btn-primary"
+                            style="background: #eab308; border-color: #ca8a04;" download>
+                            <i class="fas fa-file-alt"></i> Download Offer Letter
+                        </a>
+                    </div>
+                    <% } %>
+
+                        <!-- Download Certificate (Only for Completed) -->
+                        <% if (application.status==='COMPLETED' && application.certificate_path) { %>
+                            <div class="text-center mb-4">
+                                <a href="<%= application.certificate_path %>" class="btn-primary" download>
+                                    <i class="fas fa-certificate"></i> Download Completion Certificate
+                                </a>
+                            </div>
+                            <% } %>
+
+                                <hr>
+                                <h4 class="mt-4 mb-3">Your Details</h4>
+                                <div class="info-grid">
+                                    <div class="info-item"><label>Email</label>
+                                        <p>
+                                            <%= student.email %>
+                                        </p>
+                                    </div>
+                                    <div class="info-item"><label>Mobile No</label>
+                                        <p>
+                                            <%= student.mobile_no %>
+                                        </p>
+                                    </div>
+                                    <div class="info-item"><label>College</label>
+                                        <p>
+                                            <%= student.college_name %>
+                                        </p>
+                                    </div>
+                                    <div class="info-item"><label>Degree</label>
+                                        <p>
+                                            <%= student.degree %>
+                                        </p>
+                                    </div>
+                                    <div class="info-item"><label>Department</label>
+                                        <p>
+                                            <%= student.department %>
+                                        </p>
+                                    </div>
+                                    <div class="info-item"><label>Applied On</label>
+                                        <p>
+                                            <%= new Date(application.applied_at).toLocaleDateString() %>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <% } else { %>
+                                    <div class="text-center py-5">
+                                        <p>You haven't applied for an internship yet.</p>
+                                        <a href="/portal/apply" class="btn-primary">Apply Now</a>
+                                    </div>
+                                    <% } %>
+
+        </section>
+</body>
+
+</html>

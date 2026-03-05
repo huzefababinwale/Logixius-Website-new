@@ -1,0 +1,32 @@
+{
+  "name": "logixius-website-main",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huzefababinwale/Logixius-Website-new.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/huzefababinwale/Logixius-Website-new/issues"
+  },
+  "homepage": "https://github.com/huzefababinwale/Logixius-Website-new#readme",
+  "dependencies": {
+    "@google/genai": "^1.43.0",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "ejs": "^4.0.1",
+    "express": "^5.2.1",
+    "express-session": "^1.18.2",
+    "multer": "^2.0.2",
+    "mysql2": "^3.16.1",
+    "qrcode": "^1.5.4"
+  }
+}

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification - Logixius</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .verification-container {
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid="#e2e8f0";
+            border-radius: 6px;
+        }
+
+        .certificate-card {
+            border: 2px solid #2563EB;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/header') %>
+
+        <section class="verification-container">
+            <h2 class="text-center mb-4">Verify Internship Certificate</h2>
+
+            <form action="/verify" method="GET" class="mb-5">
+                <div class="form-group">
+                    <label for="intern_id">Enter Intern ID / Certificate No.</label>
+                    <div style="display: flex; gap: 1rem;">
+                        <input type="text" name="intern_id" id="intern_id" class="form-control"
+                            placeholder="LOGX-2024-XXX" required>
+                        <button type="submit" class="btn-primary">Verify</button>
+                    </div>
+                </div>
+                <!-- Placeholder for QR Scanner integration later -->
+                <p class="text-center text-muted">Or scan QR code on the certificate</p>
+            </form>
+
+            <% if (error) { %>
+                <div class="alert alert-danger"
+                    style="background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 6px;">
+                    <%= error %>
+                </div>
+                <% } %>
+
+                    <% if (certificate) { %>
+                        <div class="certificate-card">
+                            <i class="fas fa-check-circle fa-3x text-success mb-3" style="color: #22c55e;"></i>
+                            <h3>Certificate Verified</h3>
+                            <h4 class="mt-3">
+                                <%= certificate.student_name %>
+                            </h4>
+                            <p><strong>Intern ID:</strong>
+                                <%= certificate.intern_id %>
+                            </p>
+                            <p><strong>Domain:</strong>
+                                <%= certificate.domain %>
+                            </p>
+                            <p><strong>Duration:</strong>
+                                <%= certificate.duration %>
+                            </p>
+                            <p><strong>Issue Date:</strong>
+                                <%= new Date(certificate.issue_date).toLocaleDateString() %>
+                            </p>
+
+                            <% if (certificate.certificate_file_path) { %>
+                                <a href="<%= certificate.certificate_file_path %>" class="btn-primary mt-3" download>
+                                    <i class="fas fa-download"></i> Download Certificate
+                                </a>
+                                <% } %>
+                        </div>
+                        <% } %>
+        </section>
+</body>
+
+</html>

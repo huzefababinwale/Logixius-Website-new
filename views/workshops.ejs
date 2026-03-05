@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshops - Logixius AI</title>
+    <meta name="description"
+        content="Immersive, hands-on learning experiences designed to equip you with cutting-edge skills in Artificial Intelligence, Machine Learning, and Robotics.">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/assets/Logo/logo_logixius1.png" type="image/png">
+</head>
+
+<body>
+
+    <%- include('partials/header') %>
+
+        <!-- Workshops Hero Section -->
+        <section class="hero workshops-hero">
+            <div class="container text-center">
+                <span class="badge">Expert-Led Training</span>
+                <h1 class="hero-title">Master The Future With <br><span class="gradient-text">Our Workshops</span></h1>
+                <p class="section-desc hero-desc">
+                    Immersive, hands-on learning experiences designed to equip you with cutting-edge skills in
+                    Artificial
+                    Intelligence, Machine Learning, and Robotics. Turn theory into real-world applications.
+                </p>
+            </div>
+        </section>
+
+        <!-- Workshops Grid Section -->
+        <section class="workshops-section">
+            <div class="container">
+
+                <div class="workshops-grid">
+
+                    <!-- Gen AI Workshop -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/gen_ai.png" alt="Generative AI Workshop">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon purple">
+                                <i class="fas fa-brain"></i>
+                            </div>
+                            <h3>Generative AI Development
+                            </h3>
+                            <p>
+                                Dive deep into the mechanics of Generative AI. In this hands-on session, you will learn
+                                to
+                                build intelligent systems capable of creating text, images, and code from scratch. We
+                                cover
+                                underlying architectures, prompt engineering, and API integrations.
+                            </p>
+                            <a href="/#contact" class="read-more">Enroll
+                                Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- LangChain & LangGraph -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/langchain.png" alt="LangChain Workshop">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon blue">
+                                <i class="fas fa-network-wired"></i>
+                            </div>
+                            <h3>LangChain & LangGraph</h3>
+                            <p>
+                                Master the orchestrated power of AI agents. This workshop teaches you how to string
+                                together
+                                complex autonomous workflows, stateful multi-actor applications, and robust
+                                retrieval-augmented generation (RAG) pipelines using LangChain frameworks.
+                            </p>
+                            <a href="/#contact" class="read-more">Enroll
+                                Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- LLM Models -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/llm_workshop.png" alt="LLM Models Workshop">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon pink">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Exploring LLM Models</h3>
+                            <p>
+                                Understand the engines behind modern AI. Learn to fine-tune, deploy, and evaluate Large
+                                Language Models natively. We cover open-source alternatives, deployment constraints,
+                                model
+                                optimization, and building secure AI wrappers.
+                            </p>
+                            <a href="/#contact" class="read-more">Enroll
+                                Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Python & Tkinter -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/tkinter.png" alt="Python Tkinter Workshop">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon blue">
+                                <i class="fab fa-python"></i>
+                            </div>
+                            <h3>Python UI & AI Integration
+                            </h3>
+                            <p>
+                                Bridge the gap between frontend interfaces and AI backends. We guide you through
+                                building
+                                desktop applications using Python and Tkinter, and integrating AI endpoints to create
+                                smart,
+                                standalone software solutions.
+                            </p>
+                            <a href="/#contact" class="read-more">Enroll
+                                Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Raspberry Pi -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/raspberry_pi.png" alt="Raspberry Pi Workshop">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon purple">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            <h3>Raspberry Pi Mastery</h3>
+                            <p>
+                                Bring AI to the edge. This hardware-focused session walks you through setting up a
+                                Raspberry
+                                Pi from scratch, wiring physical sensors, and deploying lightweight AI models directly
+                                onto
+                                the device for IoT applications.
+                            </p>
+                            <a href="/#contact" class="read-more">Enroll
+                                Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Object Detection YOLO -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/object_detection.png" alt="YOLO Object Detection Workshop">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon pink">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h3>YOLO Object Detection</h3>
+                            <p>
+                                Step into Computer Vision. Learn to train and deploy state-of-the-art You Only Look Once
+                                (YOLO) models for real-time object detection. We cover image annotation, model training,
+                                and
+                                implementing live video feed inference.
+                            </p>
+                            <a href="/#contact" class="read-more">Enroll
+                                Now <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <%- include('partials/footer') %>
+
+            <script src="/script.js"></script>
+</body>
+
+</html>

@@ -18,12 +18,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     links.forEach(link => {
-        link.addEventListener('click', () => {
-            navLinks.classList.remove('active');
-            document.body.classList.remove('menu-open'); // Remove scroll lock
-            hamburger.querySelector('i').classList.remove('fa-times');
-            hamburger.querySelector('i').classList.add('fa-bars');
-        });
+        if (!link.classList.contains('dropdown')) {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                document.body.classList.remove('menu-open'); // Remove scroll lock
+                if (hamburger.querySelector('i')) {
+                    hamburger.querySelector('i').classList.remove('fa-times');
+                    hamburger.querySelector('i').classList.add('fa-bars');
+                }
+            });
+        }
+    });
+
+    // Mobile Dropdown Toggle
+    const dropdowns = document.querySelectorAll('.dropdown');
+    dropdowns.forEach(dropdown => {
+        const toggle = dropdown.querySelector('.dropdown-toggle');
+        if (toggle) {
+            toggle.addEventListener('click', (e) => {
+                // Only handle click for dropdown on mobile
+                if (window.innerWidth <= 768) {
+                    e.preventDefault(); // Prevent default link behavior
+                    dropdown.classList.toggle('open');
+                }
+            });
+        }
     });
 
     // Smooth Scrolling
@@ -113,8 +132,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const nextBtn = document.querySelector('.next');
     const thumbnailContainer = document.querySelector('.lightbox-thumbnails');
 
-    // Select ALL images (visible + hidden) that have a category
-    const allGalleryImages = Array.from(document.querySelectorAll('img[data-category]'));
+    // Select ALL images (visible + hidden) that have a category OR are in the gallery grid
+    const allGalleryImages = Array.from(document.querySelectorAll('img[data-category], .gallery-grid img'));
 
     // This will hold the subset of images for the currently active category
     let currentCategoryImages = [];
@@ -173,8 +192,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let subtitle = '';
 
         if (info && info.classList.contains('gallery-info')) {
-            title = info.querySelector('h5') ? info.querySelector('h5').innerText : category;
+            title = info.querySelector('h5') ? info.querySelector('h5').innerText : (category || 'Image Details');
             subtitle = info.querySelector('p') ? info.querySelector('p').innerText : '';
+        } else if (!category) {
+            title = 'Gallery Image';
         }
 
         captionText.innerHTML = `<strong>${title}</strong><br>${subtitle}`;
@@ -204,14 +225,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
     visibleGalleryImages.forEach((img) => {
         img.style.cursor = 'pointer';
-        img.addEventListener('click', () => {
+        img.addEventListener('click', (e) => {
+            e.stopPropagation();
             const category = img.getAttribute('data-category');
 
-            // Filter images by this category
-            currentCategoryImages = allGalleryImages.filter(image => image.getAttribute('data-category') === category);
+            if (category) {
+                // Filter images by this category
+                currentCategoryImages = allGalleryImages.filter(image => image.getAttribute('data-category') === category);
+            } else {
+                // For General Gallery, use all images in the grid
+                currentCategoryImages = Array.from(document.querySelectorAll('.gallery-grid img'));
+            }
 
             // Find index of clicked image in the new subset
-            // We match by src because 'img' object might be different if selected differently
             const clickedIndex = currentCategoryImages.findIndex(i => i.src === img.src);
 
             showLightbox(clickedIndex !== -1 ? clickedIndex : 0);

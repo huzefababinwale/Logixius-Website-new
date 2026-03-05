@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Logixius</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        .nav-tab {
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .nav-tab.active {
+            color: #2563EB;
+            border-bottom: 2px solid #2563EB;
+            margin-bottom: -1.1rem;
+        }
+    </style>
+</head>
+
+<body style="background-color: #F8FAFC;">
+    <%- include('partials/header') %>
+
+        <section class="dashboard-container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Admin Dashboard</h2>
+                <div>
+                    <span>Welcome, <strong>
+                            <%= admin %>
+                        </strong></span>
+                    <a href="/admin/logout" class="btn-outline ml-3"
+                        style="padding: 0.5rem 1rem; font-size: 0.9rem;">Logout</a>
+                </div>
+            </div>
+
+            <div class="nav-tabs">
+                <div class="nav-tab active" onclick="switchTab('applications')">Pending Applications</div>
+                <div class="nav-tab" onclick="switchTab('ongoing')">Ongoing Internships</div>
+                <div class="nav-tab" onclick="switchTab('completed')">Completed Internships</div>
+                <div class="nav-tab" onclick="switchTab('details')">Intern Details</div>
+            </div>
+
+            <!-- Manage Pending Applications -->
+            <div id="applications-section">
+                <h4 class="mb-3">Pending Applications</h4>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                        <thead>
+                            <tr style="background: #f1f5f9; text-align: left;">
+                                <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Student</th>
+                                <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Domain</th>
+                                <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Mobile</th>
+                                <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (locals.pendingApplications && pendingApplications.length> 0) { %>
+                                <% pendingApplications.forEach(app=> { %>
+                                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                                        <td style="padding: 1rem;">
+                                            <strong>
+                                                <%= app.full_name %>
+                                            </strong><br>
+                                            <span style="font-size: 0.85rem; color: #64748b;">
+                                                <%= app.email %>
+                                            </span>
+                                            <div style="margin-top: 5px;">
+                                                <button type="button"
+                                                    onclick="openStudentModal('<%= app.full_name %>', '<%= app.email %>', '<%= app.mobile_no %>', '<%= app.gender %>', '<%= app.college_name %>', '<%= app.degree %>', '<%= app.department %>', '<%= app.domain %>', '<%= new Date(app.applied_at).toLocaleDateString() %>')"
+                                                    style="background: #e0f2fe; color: #0284c7; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">
+                                                    <i class="fas fa-eye"></i> View Full Details
+                                                </button>
+                                            </div>
+                                        </td>
+                                        <td style="padding: 1rem;">
+                                            <%= app.domain %>
+                                        </td>
+                                        <td style="padding: 1rem;">
+                                            <%= app.mobile_no %>
+                                        </td>
+                                        <td style="padding: 1rem;">
+                                            <form action="/admin/approve/<%= app.id %>" method="POST"
+                                                enctype="multipart/form-data"
+                                                style="display: flex; gap: 0.5rem; flex-direction: column;">
+                                                <small style="color: #64748b;">Upload Certificate to Approve:</small>
+                                                <input type="file" name="offer_letter" required
+                                                    style="font-size: 0.85rem;">
+                                                <button type="submit" class="btn-primary"
+                                                    style="padding: 0.25rem 0.5rem; font-size: 0.85rem;">Approve &
+                                                    Generate ID</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="4"
+                                                    style="padding: 2rem; text-align: center; color: #64748b;">No
+                                                    pending applications.</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <% if (locals.success) { %>
+                <div class="alert alert-success"
+                    style="background: #dcfce7; color: #166534; padding: 1rem; border-radius: 6px; margin-bottom: 2rem;">
+                    Certificate added successfully!
+                </div>
+                <% } %>
+
+                    <!-- Manage Ongoing Internships (Issue Certificate) -->
+                    <div id="ongoing-section" style="display: none;">
+                        <h4 class="mb-3">Ongoing Internships</h4>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                <thead>
+                                    <tr style="background: #f1f5f9; text-align: left;">
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Student</th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Domain</th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Intern ID</th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.ongoingApplications && ongoingApplications.length> 0) { %>
+                                        <% ongoingApplications.forEach(app=> { %>
+                                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                                <td style="padding: 1rem;">
+                                                    <strong>
+                                                        <%= app.full_name %>
+                                                    </strong><br>
+                                                    <span style="font-size: 0.85rem; color: #64748b;">
+                                                        <%= app.email %>
+                                                    </span>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <%= app.domain %>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <%= app.intern_id %>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <form action="/admin/complete/<%= app.id %>" method="POST"
+                                                        enctype="multipart/form-data"
+                                                        style="display: flex; gap: 0.5rem; flex-direction: column;">
+                                                        <small style="color: #64748b;">Upload Completion
+                                                            Certificate:</small>
+                                                        <input type="file" name="certificate_file" required
+                                                            style="font-size: 0.85rem;">
+                                                        <button type="submit" class="btn-primary"
+                                                            style="padding: 0.25rem 0.5rem; font-size: 0.85rem; background: #16a34a; border-color: #15803d;">Complete
+                                                            & Issue</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="4"
+                                                            style="padding: 2rem; text-align: center; color: #64748b;">
+                                                            No ongoing internships.</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Completed Internships Section -->
+                    <div id="completed-section" style="display: none;">
+                        <h4 class="mb-3">Completed Internships</h4>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 600px;">
+                                <thead>
+                                    <tr style="background: #f1f5f9; text-align: left;">
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Intern ID</th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Name</th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Domain</th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Completion Date
+                                        </th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.certificates && certificates.length> 0) { %>
+                                        <% certificates.forEach(cert=> { %>
+                                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                                <td style="padding: 1rem;">
+                                                    <%= cert.intern_id %>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <%= cert.student_name %>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <%= cert.domain %>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <%= new Date(cert.issue_date).toLocaleDateString() %>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <a href="<%= cert.certificate_file_path %>" target="_blank"
+                                                        style="color: #2563EB; text-decoration: none; margin-right: 10px;">View
+                                                        Certificate</a>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="5"
+                                                            style="padding: 2rem; text-align: center; color: #64748b;">
+                                                            No completed internships yet.</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Intern Details Section (Full Info) -->
+                    <div id="details-section" style="display: none;">
+                        <h4 class="mb-3">All Registered Interns</h4>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 900px;">
+                                <thead>
+                                    <tr style="background: #f1f5f9; text-align: left;">
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Personal Profile
+                                        </th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Education</th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Internship Status
+                                        </th>
+                                        <th style="padding: 1rem; border-bottom: 2px solid #e2e8f0;">Dates</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if (locals.allStudents && allStudents.length> 0) { %>
+                                        <% allStudents.forEach(stu=> { %>
+                                            <tr style="border-bottom: 1px solid #e2e8f0;">
+                                                <td style="padding: 1rem;">
+                                                    <strong>
+                                                        <%= stu.full_name %>
+                                                    </strong> <span style="font-size: 0.8rem; color: #64748b;">(<%=
+                                                            stu.gender %>)</span><br>
+                                                    <div style="margin-top: 5px; font-size: 0.85rem;">
+                                                        <i class="fas fa-envelope"
+                                                            style="width: 16px; color: #64748b;"></i>
+                                                        <%= stu.email %><br>
+                                                            <i class="fas fa-phone"
+                                                                style="width: 16px; color: #64748b;"></i>
+                                                            <%= stu.mobile_no %>
+                                                    </div>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <strong>
+                                                        <%= stu.degree %>
+                                                    </strong><br>
+                                                    <span style="color: #1e293b;">
+                                                        <%= stu.department %>
+                                                    </span><br>
+                                                    <span style="font-size: 0.9rem; color: #64748b;">
+                                                        <%= stu.college_name %>
+                                                    </span>
+                                                </td>
+                                                <td style="padding: 1rem;">
+                                                    <% if (stu.application_status==='PENDING' ) { %>
+                                                        <span
+                                                            style="background: #fff7ed; color: #9a3412; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">Pending</span>
+                                                        <br><small>
+                                                            <%= stu.domain %>
+                                                        </small>
+                                                        <% } else if (stu.application_status==='ONGOING' ) { %>
+                                                            <span
+                                                                style="background: #e0f2fe; color: #0369a1; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">Ongoing</span>
+                                                            <br><small><strong>
+                                                                    <%= stu.domain %>
+                                                                </strong></small><br>
+                                                            <small style="color: #64748b;">ID: <%= stu.intern_id %>
+                                                            </small>
+                                                            <% } else if (stu.application_status==='COMPLETED' ) { %>
+                                                                <span
+                                                                    style="background: #dcfce7; color: #166534; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">Completed</span>
+                                                                <br><small><strong>
+                                                                        <%= stu.domain %>
+                                                                    </strong></small><br>
+                                                                <small style="color: #64748b;">ID: <%= stu.intern_id %>
+                                                                </small>
+                                                                <% } else { %>
+                                                                    <span
+                                                                        style="background: #f1f5f9; color: #64748b; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem;">
+                                                                        <%= stu.application_status %>
+                                                                    </span>
+                                                                    <% } %>
+                                                </td>
+                                                <td style="padding: 1rem; font-size: 0.9rem;">
+                                                    <% if (stu.start_date) { %>
+                                                        <div style="margin-bottom: 4px;"><strong>Start:</strong>
+                                                            <%= new Date(stu.start_date).toLocaleDateString() %>
+                                                        </div>
+                                                        <% } %>
+                                                            <% if (stu.completion_date) { %>
+                                                                <div style="color: #166534;"><strong>End:</strong>
+                                                                    <%= new
+                                                                        Date(stu.completion_date).toLocaleDateString()
+                                                                        %>
+                                                                </div>
+                                                                <% } %>
+                                                                    <div
+                                                                        style="color: #94a3b8; font-size: 0.8rem; margin-top: 4px;">
+                                                                        Joined: <%= new
+                                                                            Date(stu.created_at).toLocaleDateString() %>
+                                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }); %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="4"
+                                                            style="padding: 2rem; text-align: center; color: #64748b;">
+                                                            No registered students found.</td>
+                                                    </tr>
+                                                    <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+        </section>
+
+        <script>
+            function switchTab(tab) {
+                const appSection = document.getElementById('applications-section');
+                const ongoingSection = document.getElementById('ongoing-section');
+                const completedSection = document.getElementById('completed-section');
+                const detailsSection = document.getElementById('details-section');
+                const tabs = document.querySelectorAll('.nav-tab');
+
+                // Reset all
+                appSection.style.display = 'none';
+                ongoingSection.style.display = 'none';
+                completedSection.style.display = 'none';
+                detailsSection.style.display = 'none';
+                tabs.forEach(t => t.classList.remove('active'));
+
+                if (tab === 'applications') {
+                    appSection.style.display = 'block';
+                    tabs[0].classList.add('active');
+                } else if (tab === 'ongoing') {
+                    ongoingSection.style.display = 'block';
+                    tabs[1].classList.add('active');
+                } else if (tab === 'completed') {
+                    completedSection.style.display = 'block';
+                    tabs[2].classList.add('active');
+                } else {
+                    detailsSection.style.display = 'block';
+                    tabs[3].classList.add('active');
+                }
+            }
+        </script>
+</body>
+
+<!-- Student Details Modal -->
+<div id="studentModal"
+    style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+    <div
+        style="background: white; width: 90%; max-width: 500px; padding: 2rem; border-radius: 12px; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1); position: relative;">
+        <button onclick="closeStudentModal()"
+            style="position: absolute; top: 1rem; right: 1rem; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #64748b;">&times;</button>
+
+        <h3 style="margin-bottom: 1.5rem; border-bottom: 2px solid #e2e8f0; padding-bottom: 0.5rem;">Intern Application
+            Details</h3>
+
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+            <div>
+                <label
+                    style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Full
+                    Name</label>
+                <div id="modal-name" style="font-weight: 500; font-size: 1.1rem;"></div>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <div style="flex: 1;">
+                    <label
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Email</label>
+                    <div id="modal-email"></div>
+                </div>
+                <div style="flex: 1;">
+                    <label
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Phone</label>
+                    <div id="modal-phone"></div>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <div style="flex: 1;">
+                    <label
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Gender</label>
+                    <div id="modal-gender"></div>
+                </div>
+                <div style="flex: 1;">
+                    <label
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Applied
+                        On</label>
+                    <div id="modal-date"></div>
+                </div>
+            </div>
+
+            <div>
+                <label
+                    style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">College</label>
+                <div id="modal-college"></div>
+            </div>
+
+            <div style="display: flex; gap: 1rem;">
+                <div style="flex: 1;">
+                    <label
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Degree</label>
+                    <div id="modal-degree"></div>
+                </div>
+                <div style="flex: 1;">
+                    <label
+                        style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Department</label>
+                    <div id="modal-dept"></div>
+                </div>
+            </div>
+
+            <div>
+                <label
+                    style="font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #64748b; font-weight: 600;">Applied
+                    Domain</label>
+                <div id="modal-domain"
+                    style="display: inline-block; background: #dcfce7; color: #166534; padding: 2px 8px; border-radius: 4px; font-weight: 500; font-size: 0.9rem;">
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top: 2rem; display: flex; justify-content: flex-end;">
+            <button onclick="closeStudentModal()" class="btn-primary"
+                style="background: #64748b; border: none;">Close</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openStudentModal(name, email, phone, gender, college, degree, dept, domain, date) {
+        document.getElementById('modal-name').innerText = name;
+        document.getElementById('modal-email').innerText = email;
+        document.getElementById('modal-phone').innerText = phone;
+        document.getElementById('modal-gender').innerText = gender;
+        document.getElementById('modal-college').innerText = college;
+        document.getElementById('modal-degree').innerText = degree;
+        document.getElementById('modal-dept').innerText = dept;
+        document.getElementById('modal-domain').innerText = domain;
+        document.getElementById('modal-date').innerText = date;
+
+        document.getElementById('studentModal').style.display = 'flex';
+    }
+
+    function closeStudentModal() {
+        document.getElementById('studentModal').style.display = 'none';
+    }
+</script>
+
+</html>

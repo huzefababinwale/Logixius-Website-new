@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery - Logixius AI</title>
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/assets/Logo/logo_logixius1.png" type="image/png">
+
+    <style>
+        .gallery-container {
+            padding-top: 100px;
+            padding-bottom: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            color: #1e293b;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            height: 250px;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Mobile adjustment */
+        @media (max-width: 768px) {
+            .gallery-container {
+                padding-top: 80px;
+            }
+        }
+
+        /* Filter Button Styles */
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #e2e8f0;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--gradient-brand);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+    <%- include('partials/header') %>
+
+        <div class="gallery-container">
+            <div class="page-title fade-in-up">
+                <span class="badge-pill">Gallery</span>
+                <h1>Life at <span class="gradient-text">Logixius</span></h1>
+                <p style="color: #64748b; margin-top: 0.5rem;">Industrial Training, Workshops, and Innovation.</p>
+            </div>
+
+            <% const groups=locals.galleryGroups || {}; const categories=Object.keys(groups).sort(); %>
+
+                <% categories.forEach(category=> { %>
+                    <div class="gallery-section" style="margin-bottom: 4rem;">
+                        <h3 class="subsection-title"
+                            style="text-align: center; margin-bottom: 2rem; color: #1e293b; font-size: 1.8rem;">
+                            <%= category %>
+                        </h3>
+
+                        <div class="gallery-grid">
+                            <% groups[category].forEach((imgObj, index)=> { %>
+                                <div class="gallery-item" data-category="<%= imgObj.category %>">
+                                    <img src="/assets/project and work/<%= imgObj.src %>" alt="<%= category %> Image"
+                                        data-category="<%= imgObj.category %>" loading="lazy">
+                                    <div class="gallery-info" style="display:none;">
+                                        <h5>
+                                            <%= imgObj.category %>
+                                        </h5>
+                                    </div>
+                                </div>
+                                <% }); %>
+                        </div>
+                    </div>
+                    <% }); %>
+
+                        <% if (categories.length===0) { %>
+                            <div style="text-align: center; color: #64748b; padding: 2rem;">
+                                <p>No images found in the gallery folders.</p>
+                            </div>
+                            <% } %>
+        </div>
+
+        <!-- Lightbox Modal (Reusing existing structure for script.js compatibility) -->
+        <div id="lightbox" class="lightbox-modal">
+            <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+            <img class="lightbox-content" id="lightbox-img">
+            <div id="caption"></div>
+            <div class="lightbox-thumbnails"></div>
+            <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+            <a class="next" onclick="changeSlide(1)">&#10095;</a>
+        </div>
+
+        <%- include('partials/footer') %>
+
+            <script src="/script.js"></script>
+</body>
+
+</html>

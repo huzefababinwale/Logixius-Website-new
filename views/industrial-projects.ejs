@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial Projects - Logixius AI</title>
+    <meta name="description"
+        content="Explore our extensive portfolio of industrial projects, from LLM integrations to Military Tech and advanced Gauge Reading Detection systems.">
+    <link rel="stylesheet" href="/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="/assets/Logo/logo_logixius1.png" type="image/png">
+</head>
+
+<body>
+
+    <%- include('partials/header') %>
+
+        <!-- Projects Hero Section -->
+        <section class="hero workshops-hero">
+            <div class="container text-center">
+                <span class="badge">Real-world Solutions</span>
+                <h1 class="hero-title">Pioneering <br><span class="gradient-text">Industrial Projects</span></h1>
+                <p class="section-desc hero-desc">
+                    Discover how we apply state-of-the-art Artificial Intelligence and Machine Learning technologies
+                    to solve complex industrial challenges across various sectors.
+                </p>
+            </div>
+        </section>
+
+        <!-- Projects Grid Section -->
+        <section class="workshops-section">
+            <div class="container">
+
+                <div class="workshops-grid">
+
+                    <!-- LLM Models -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/llm_workshop.png" alt="LLM Models">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon pink">
+                                <i class="fas fa-database"></i>
+                            </div>
+                            <h3>Enterprise LLM Integrations</h3>
+                            <p>
+                                We design and deploy custom Large Language Models specifically tailored for enterprise
+                                environments.
+                                Our solutions enhance internal operations, automate complex data analysis, and improve
+                                customer
+                                interaction while maintaining strict data security.
+                            </p>
+                            <a href="/#contact" class="read-more">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Military Tech -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/object_detection.png" alt="Military Tech">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon blue">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>Military Tech & Security</h3>
+                            <p>
+                                Providing robust, high-performance tactical intelligence and surveillance systems.
+                                Our AI-driven military technology solutions focus on proactive threat detection,
+                                advanced
+                                target tracking, and autonomous drone navigation for critical defense operations.
+                            </p>
+                            <a href="/#contact" class="read-more">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Bushilp Mine Project -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/raspberry_pi.png" alt="Bushilp Mine Project">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon purple">
+                                <i class="fas fa-tachometer-alt"></i>
+                            </div>
+                            <h3>Bushilp Mine Project <br><span style="font-size: 0.8em; font-weight: normal;">(Gauge
+                                    Reading Detection)</span></h3>
+                            <p>
+                                An industrial IoT and Computer Vision project implemented at the Bushilp Mines. We
+                                developed
+                                an automated system to consistently monitor and accurately read analog pressure and
+                                temperature
+                                gauges using edge ML devices, drastically reducing manual inspection errors.
+                            </p>
+                            <a href="/#contact" class="read-more">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Other Projects -->
+                    <div class="workshop-card">
+                        <div class="workshop-img">
+                            <img src="/assets/workshops/gen_ai.png" alt="Other Industrial Projects">
+                        </div>
+                        <div class="workshop-content">
+                            <div class="card-icon blue">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3>Custom Tech Solutions</h3>
+                            <p>
+                                Beyond specific domains, we have successfully developed tailored predictive maintenance
+                                architectures, automated assembly pipeline monitors, and anomaly detection algorithms
+                                that align with the specific operational constraints of diverse industrial partners.
+                            </p>
+                            <a href="/#contact" class="read-more">Learn More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <%- include('partials/footer') %>
+
+            <script src="/script.js"></script>
+</body>
+
+</html>
