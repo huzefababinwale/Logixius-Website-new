@@ -450,12 +450,17 @@ app.get('/admin/logout', (req, res) => {
     res.redirect('/admin/login');
 });
 
-// Start Server
-app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+// Export the app for Vercel
+module.exports = app;
 
-    // Test Database Connection
-    db.query('SELECT 1')
-        .then(() => console.log('✅ Database Connection Successful!'))
-        .catch(err => console.error('❌ Database Connection Failed:', err.message));
-});
+// Start Server (Only when not running on Vercel)
+if (!process.env.VERCEL) {
+    app.listen(PORT, () => {
+        console.log(`Server running at http://localhost:${PORT}`);
+
+        // Test Database Connection
+        db.query('SELECT 1')
+            .then(() => console.log('✅ Database Connection Successful!'))
+            .catch(err => console.error('❌ Database Connection Failed:', err.message));
+    });
+}
