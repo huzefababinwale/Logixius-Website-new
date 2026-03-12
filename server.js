@@ -26,20 +26,10 @@ const bcrypt = require('bcrypt');
 const multer = require('multer');
 const QRCode = require('qrcode');
 const fs = require('fs');
+const { put } = require('@vercel/blob');
 
-// Configure Multer for file uploads
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => {
-        const dir = './uploads/certificates';
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir, { recursive: true });
-        }
-        cb(null, dir);
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + '-' + file.originalname);
-    }
-});
+// Configure Multer for file uploads using memory storage
+const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 // Routes
@@ -221,12 +211,19 @@ app.post('/admin/add-certificate', upload.single('certificate_file'), async (req
     if (!req.session.adminId) return res.redirect('/admin/login');
 
     const { student_name, intern_id, domain, duration } = req.body;
-    const certificate_file_path = '/uploads/certificates/' + req.file.filename;
-
-    // Generate QR Code that points to verification URL
-    const verificationUrl = `${req.protocol}://${req.get('host')}/verify?intern_id=${intern_id}`;
+    let certificate_file_path = null;
 
     try {
+        if (req.file) {
+            const blob = await put(req.file.originalname, req.file.buffer, {
+                access: 'public',
+                token: process.env.BLOB_READ_WRITE_TOKEN
+            });
+            certificate_file_path = blob.url;
+        }
+
+        // Generate QR Code that points to verification URL
+        const verificationUrl = `${req.protocol}://${req.get('host')}/verify?intern_id=${intern_id}`;
         const qrCodeDataUrl = await QRCode.toDataURL(verificationUrl);
 
         await db.query(
@@ -246,9 +243,17 @@ app.post('/admin/approve/:id', upload.single('offer_letter'), async (req, res) =
     if (!req.session.adminId) return res.redirect('/admin/login');
 
     const applicationId = req.params.id;
-    const offer_letter_path = '/uploads/certificates/' + req.file.filename; // Reusing same folder for simplicity
 
     try {
+        let offer_letter_path = null;
+        if (req.file) {
+            const blob = await put(req.file.originalname, req.file.buffer, {
+                access: 'public',
+                token: process.env.BLOB_READ_WRITE_TOKEN
+            });
+            offer_letter_path = blob.url;
+        }
+
         // 1. Fetch Application & Student Details
         const [apps] = await db.query(`
             SELECT a.*, s.mobile_no 
@@ -284,9 +289,17 @@ app.post('/admin/complete/:id', upload.single('certificate_file'), async (req, r
     if (!req.session.adminId) return res.redirect('/admin/login');
 
     const applicationId = req.params.id;
-    const certificate_file_path = '/uploads/certificates/' + req.file.filename;
 
     try {
+        let certificate_file_path = null;
+        if (req.file) {
+            const blob = await put(req.file.originalname, req.file.buffer, {
+                access: 'public',
+                token: process.env.BLOB_READ_WRITE_TOKEN
+            });
+            certificate_file_path = blob.url;
+        }
+
         // 1. Fetch Application & Student Details
         const [apps] = await db.query(`
             SELECT a.*, s.full_name 
