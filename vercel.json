@@ -7,12 +7,26 @@
             "config": {
                 "includeFiles": [
                     "assets/**",
-                    "views/**"
+                    "views/**",
+                    "style.css",
+                    "script.js"
                 ]
             }
         }
     ],
     "rewrites": [
+        {
+            "source": "/assets/(.*)",
+            "destination": "/assets/$1"
+        },
+        {
+            "source": "/style.css",
+            "destination": "/style.css"
+        },
+        {
+            "source": "/script.js",
+            "destination": "/script.js"
+        },
         {
             "source": "/(.*)",
             "destination": "/server.js"
